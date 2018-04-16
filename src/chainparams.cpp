@@ -46,11 +46,11 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
-	(0, uint256("0x00000a908210e8e1bf438a8b59e691bb80ae6630a103f170830f5d37ba701e4f"));
+	(0, uint256("0x000008fef3a083a36208f4bcf73811d225bf70c0c25fced32b0e457ca75eab59"));
     
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1521892800, // * UNIX timestamp of last checkpoint block
+    1523896200, // * UNIX timestamp of last checkpoint block
     0,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
@@ -108,12 +108,12 @@ public:
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
-        genesis.nTime = 1521892800;
+        genesis.nTime = 1523896200;
         genesis.nBits = bnProofOfWorkLimit.GetCompact();
-        genesis.nNonce = 666751;
+        genesis.nNonce = 206677;
 		
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x00000a908210e8e1bf438a8b59e691bb80ae6630a103f170830f5d37ba701e4f"));
+        assert(hashGenesisBlock == uint256("0x000008fef3a083a36208f4bcf73811d225bf70c0c25fced32b0e457ca75eab59"));
         assert(genesis.hashMerkleRoot == uint256("0x7dc06dd8c9bb15f1f4bfd39a96a9be72257b79fd591b67529c887cc8021d30f7"));
 		
         vSeeds.push_back(CDNSSeedData("0", "seed1.copico.io"));
@@ -144,7 +144,7 @@ public:
         nPoolMaxTransactions = 3;
         strSporkKey = "04338280798413878bbb0499614330f3d8b209e369adff6f48ea51c212cbf426517eebd214af1bf47677d4a2dc74cf4362c9a45e0d86ee66e429a65dcca7d78a97";
         strObfuscationPoolDummyAddress = "CYiNW89nDmRdrFjhMA6SGLX3gjffrBLFdY";
-        nStartMasternodePayments = 1521892800; //24 March 2018 12:00:00
+        nStartMasternodePayments = 1523896200; //16 April 2018 16:30:00 GMT +00
     }
     const Checkpoints::CCheckpointData& Checkpoints() const
     {

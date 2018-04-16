@@ -796,7 +796,7 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
 
     //get block value and calculate from that
     CAmount nSubsidy = 0;
-    if (nHeight > Params().LAST_POW_BLOCK() && nHeight < 345600) {
+    if (nHeight >= 100 && nHeight < 345600) {
         nSubsidy = 1 * COIN;
     } else if (nHeight >= 345600 && nHeight < 1036800) {
         nSubsidy = 0.5 * COIN;
