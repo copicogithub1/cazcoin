@@ -1,0 +1,26 @@
+[Unit]
+Description=Cazcoin's distributed currency daemon
+After=network.target
+
+[Service]
+User=cazcoin
+Group=cazcoin
+
+Type=forking
+PIDFile=/var/lib/cazcoind/cazcoind.pid
+
+ExecStart=/usr/bin/cazcoind -daemon -pid=/var/lib/cazcoind/cazcoind.pid \
+          -conf=/etc/cazcoin/cazcoin.conf -datadir=/var/lib/cazcoind
+
+ExecStop=-/usr/bin/cazcoin-cli -conf=/etc/cazcoin/cazcoin.conf \
+         -datadir=/var/lib/cazcoind stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

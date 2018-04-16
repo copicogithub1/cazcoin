@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Cazcoin
+Comment=Cazcoin P2P Cryptocurrency
+Comment[fr]=Cazcoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Cazcoin, eşten eşe kriptografik sanal para birimi
+Exec=cazcoin-qt %u
+Terminal=false
+Type=Application
+Icon=cazcoin128
+MimeType=x-scheme-handler/cazcoin;
+Categories=Office;Finance;

@@ -1,0 +1,17 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="ca">locale/cazcoin_ca.qm</file>
+        <file alias="da">locale/cazcoin_da.qm</file>
+        <file alias="de">locale/cazcoin_de.qm</file>
+        <file alias="en">locale/cazcoin_en.qm</file>
+        <file alias="en_US">locale/cazcoin_en_US.qm</file>
+        <file alias="es">locale/cazcoin_es.qm</file>
+        <file alias="fr_FR">locale/cazcoin_fr_FR.qm</file>
+        <file alias="it">locale/cazcoin_it.qm</file>
+        <file alias="ja">locale/cazcoin_ja.qm</file>
+        <file alias="pt">locale/cazcoin_pt.qm</file>
+        <file alias="ro_RO">locale/cazcoin_ro_RO.qm</file>
+        <file alias="ru">locale/cazcoin_ru.qm</file>
+        <file alias="zh_TW">locale/cazcoin_zh_TW.qm</file>
+    </qresource>
+</RCC>

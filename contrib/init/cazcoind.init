@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#  cazcoind The Cazcoin server.
+#
+#
+# chkconfig: 345 80 20
+# description: cazcoind
+# processname: cazcoind
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/cazcoind, see below
+if [ -f /etc/sysconfig/cazcoind ]; then
+        . /etc/sysconfig/cazcoind
+fi
+
+RETVAL=0
+
+prog=cazcoind
+# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/cazcoind
+lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/cazcoind}
+
+# cazcoind defaults to /usr/bin/cazcoind, override with BITCOIND_BIN
+bitcoind=${BITCOIND_BIN-/usr/bin/cazcoind}
+
+# cazcoind opts default to -disablewallet, override with BITCOIND_OPTS
+bitcoind_opts=${BITCOIND_OPTS}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $bitcoind $bitcoind_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac
