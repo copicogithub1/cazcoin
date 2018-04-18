@@ -32,7 +32,7 @@ To obtain it, register for a developer account, then download the [Xcode 7.3.1 d
 This file is several gigabytes in size, but only a single directory inside is
 needed:
 ```
-Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
+Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk
 ```
 
 Unfortunately, the usual linux tools (7zip, hpmount, loopback mount) are incapable of opening this file.
@@ -41,19 +41,19 @@ To create a tarball suitable for Gitian input, there are two options:
 Using Mac OS X, you can mount the dmg, and then create it with:
 ```
   $ hdiutil attach Xcode_7.3.1.dmg
-  $ tar -C /Volumes/Xcode/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -czf MacOSX10.7.sdk.tar.gz MacOSX10.7.sdk
+  $ tar -C /Volumes/Xcode/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -czf MacOSX10.11.sdk.tar.gz MacOSX10.12.sdk
 ```
 
 Alternatively, you can use 7zip and SleuthKit to extract the files one by one.
 The script contrib/macdeploy/extract-osx-sdk.sh automates this. First ensure
 the dmg file is in the current directory, and then run the script. You may wish
-to delete the intermediate 5.hfs file and MacOSX10.7.sdk (the directory) when
+to delete the intermediate 5.hfs file and MacOSX10.12.sdk (the directory) when
 you've confirmed the extraction succeeded.
 
 ```bash
 apt-get install p7zip-full sleuthkit
 contrib/macdeploy/extract-osx-sdk.sh
-rm -rf 5.hfs MacOSX10.7.sdk
+rm -rf 5.hfs MacOSX10.12.sdk
 ```
 
 The Gitian descriptors build 2 sets of files: Linux tools, then Apple binaries
@@ -92,6 +92,6 @@ build process to remain somewhat deterministic. Here's how it works:
   that have been previously (deterministically) built in order to create a
   final dmg.
 - **TODO** The Apple keyholder uses this unsigned app to create a detached signature,
-  using the script that is also included there. Detached signatures are available from this [repository](https://github.com/copicogithub1/cazcoin-detached-sigs).
+  using the script that is also included there. Detached signatures are available from this [repository](https://github.com/thnass/cazcoin-detached-sigs).
 - Builders feed the unsigned app + detached signature back into Gitian. It
   uses the pre-built tools to recombine the pieces into a deterministic dmg.

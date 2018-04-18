@@ -44,7 +44,7 @@ Instructions: Homebrew
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/copicogithub1/cazcoin.git
+        git clone https://github.com/thnass/cazcoin.git
         cd CazCoin
 
 2.  Build cazcoind:
@@ -90,7 +90,7 @@ All dependencies should be compiled with these flags:
 
  -mmacosx-version-min=10.7
  -arch x86_64
- -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
+ -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk
 
 Once dependencies are compiled, see release-process.md for how the CazCoin-Qt.app
 bundle is packaged and signed to create the .dmg disk image that is distributed.
