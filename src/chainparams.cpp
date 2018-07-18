@@ -51,11 +51,15 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 	(5000, uint256("0xc702646102e539852d5a1dbc19488ff99078d000ef1a31d7718294037f8c0c91"))
 	(10000, uint256("0x1cc418c72666736a70c2adf35b1bc5c6fce07aca97b31af45d68761c3ab66912"))
 	(20000, uint256("0x62a224ea22e767b354f1f0e5854c8f6da85216f22329c0f00a563c6f90351a4d"))
-	(25550, uint256("0xb790cd6f25351bc9fbc711c58ecd97ea4585702a407ab938d7f09db7e41e4fb2"));
+	(25550, uint256("0xb790cd6f25351bc9fbc711c58ecd97ea4585702a407ab938d7f09db7e41e4fb2"))
+	(50000, uint256("0x18979aa918bf457765ecc9d4bbf761a0bfa656f6cb12dd0007e5ceebac811edd"))
+	(80000, uint256("0x1bdefb98540a6a66da1ae7217e47d45d6de8a36a53869ddc9de869cb50321c26"))
+	(110000, uint256("0x64532ec3abe8553d7e33b99c2a4db39c95bd674d2cf69d42d7642ab417d1308c"))
+	(118800, uint256("0x43425e5ea2b977e11ddb9eb27b7ec2d923b5c616c7144b8d259f2cc3ee29732e"));
     
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1525521668, // * UNIX timestamp of last checkpoint block
+	1531176411, // * UNIX timestamp of last checkpoint block
     0,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
@@ -100,6 +104,7 @@ public:
         nTargetSpacing = 1 * 90; 
         nLastPOWBlock = 2000;
         nMaturity = 50;
+        nProtocol_switch = 118820;
         nModifierUpdateBlock = 1;
 		
         const char* pszTimestamp = "Copico to launch one of it's innovative products on the blockchain";
@@ -121,10 +126,16 @@ public:
         assert(hashGenesisBlock == uint256("0x000008fef3a083a36208f4bcf73811d225bf70c0c25fced32b0e457ca75eab59"));
         assert(genesis.hashMerkleRoot == uint256("0x7dc06dd8c9bb15f1f4bfd39a96a9be72257b79fd591b67529c887cc8021d30f7"));
 		
-        vSeeds.push_back(CDNSSeedData("0", "seed1.copico.io"));
-        vSeeds.push_back(CDNSSeedData("1", "seed2.copico.io"));
-        vSeeds.push_back(CDNSSeedData("2", "seed3.copico.io"));
-        vSeeds.push_back(CDNSSeedData("3", "seed4.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed1.copico.io", "seed1.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed2.copico.io", "seed2.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed3.copico.io", "seed3.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed4.copico.io", "seed4.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed5.copico.io", "seed5.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed6.copico.io", "seed6.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed7.copico.io", "seed7.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed8.copico.io", "seed8.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed9.copico.io", "seed9.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed10.copico.io", "seed10.copico.io"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 28);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 43);
@@ -185,7 +196,7 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("seed5.copico.io", "seed5.copico.io"));
+        vSeeds.push_back(CDNSSeedData("seed11.copico.io", "seed11.copico.io"));
 		
 		
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet cazcoin addresses start with 'x' or 'y'

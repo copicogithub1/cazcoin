@@ -72,6 +72,7 @@ public:
     int64_t Interval() const { return nTargetTimespan / nTargetSpacing; }
     int LAST_POW_BLOCK() const { return nLastPOWBlock; }
     int COINBASE_MATURITY() const { return nMaturity; }
+    int PROTOCOL_SWITCH() const { return nProtocol_switch; }
 	int ModifierUpgradeBlock() const { return nModifierUpdateBlock; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
     int MasternodeCountDrift() const { return nMasternodeCountDrift; }
@@ -107,6 +108,7 @@ protected:
     int nLastPOWBlock;
     int nMasternodeCountDrift;
     int nMaturity;
+    int nProtocol_switch;
 	int nModifierUpdateBlock;
     int nMinerThreads;
     std::vector<CDNSSeedData> vSeeds;
