@@ -72,6 +72,7 @@ public:
     int64_t Interval() const { return nTargetTimespan / nTargetSpacing; }
     int LAST_POW_BLOCK() const { return nLastPOWBlock; }
     int COINBASE_MATURITY() const { return nMaturity; }
+    int NEW_COINBASE_MATURITY() const { return nNewMaturity; }
     int PROTOCOL_SWITCH() const { return nProtocol_switch; }
 	int ModifierUpgradeBlock() const { return nModifierUpdateBlock; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
@@ -108,6 +109,7 @@ protected:
     int nLastPOWBlock;
     int nMasternodeCountDrift;
     int nMaturity;
+    int nNewMaturity;
     int nProtocol_switch;
 	int nModifierUpdateBlock;
     int nMinerThreads;

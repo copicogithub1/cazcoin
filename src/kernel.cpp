@@ -19,7 +19,7 @@ bool fTestNet = false; //Params().NetworkID() == CBaseChainParams::TESTNET;
 // Modifier interval: time to elapse before new modifier is computed
 // Set to 3-hour for production network and 20-minute for test network
 unsigned int nModifierInterval;
-int nStakeTargetSpacing = 60;
+int nStakeTargetSpacing = 90;
 unsigned int getIntervalVersion(bool fTestNet)
 {
     if (fTestNet)
@@ -35,7 +35,10 @@ static std::map<int, unsigned int> mapStakeModifierCheckpoints =
 // Get time weight
 int64_t GetWeight(int64_t nIntervalBeginning, int64_t nIntervalEnd)
 {
-    return nIntervalEnd - nIntervalBeginning - nStakeMinAge;
+    //return nIntervalEnd - nIntervalBeginning - nStakeMinAge;
+    int cHeight = chainActive.Height();
+    unsigned int cStakeMinAge = StakeMinAge(cHeight);
+    return nIntervalEnd - nIntervalBeginning - cStakeMinAge;
 }
 
 // Get the last stake modifier and its generation time from a given block
@@ -294,12 +297,14 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock blockFrom, const CTra
     //assign new variables to make it easier to read
     int64_t nValueIn = txPrev.vout[prevout.n].nValue;
     unsigned int nTimeBlockFrom = blockFrom.GetBlockTime();
+    int cHeight = chainActive.Height();
+    unsigned int cStakeMinAge = StakeMinAge(cHeight);
 
     if (nTimeTx < nTimeBlockFrom) // Transaction timestamp violation
         return error("CheckStakeKernelHash() : nTime violation");
 
-    if (nTimeBlockFrom + nStakeMinAge > nTimeTx) // Min age requirement
-        return error("CheckStakeKernelHash() : min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d", nTimeBlockFrom, nStakeMinAge, nTimeTx);
+    if (nTimeBlockFrom + cStakeMinAge > nTimeTx) // Min age requirement
+    return error("CheckStakeKernelHash() : min age violation - nTimeBlockFrom=%d cStakeMinAge=%d nTimeTx=%d", nTimeBlockFrom, cStakeMinAge, nTimeTx);
 
     //grab difficulty
     uint256 bnTargetPerCoinDay;

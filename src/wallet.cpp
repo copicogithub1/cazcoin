@@ -1565,6 +1565,8 @@ bool CWallet::SelectStakeCoins(std::set<std::pair<const CWalletTx*, unsigned int
     vector<COutput> vCoins;
     AvailableCoins(vCoins, true);
     int64_t nAmountSelected = 0;
+    int cHeight = chainActive.Height();
+    unsigned int cStakeMinAge = StakeMinAge(cHeight);
 
     BOOST_FOREACH (const COutput& out, vCoins) {
         //make sure not to outrun target amount
@@ -1572,7 +1574,7 @@ bool CWallet::SelectStakeCoins(std::set<std::pair<const CWalletTx*, unsigned int
             continue;
 
         //check for min age
-        if (GetTime() - out.tx->GetTxTime() < nStakeMinAge)
+        if (GetTime() - out.tx->GetTxTime() < cStakeMinAge)
             continue;
 
         //check that it is matured
@@ -1588,6 +1590,8 @@ bool CWallet::SelectStakeCoins(std::set<std::pair<const CWalletTx*, unsigned int
 
 bool CWallet::MintableCoins()
 {
+	int cHeight = chainActive.Height();
+	unsigned int cStakeMinAge = StakeMinAge(cHeight);
     int64_t nBalance = GetBalance();
     if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
         return error("MintableCoins() : invalid reserve balance amount");
@@ -1598,7 +1602,7 @@ bool CWallet::MintableCoins()
     AvailableCoins(vCoins, true);
 
     BOOST_FOREACH (const COutput& out, vCoins) {
-        if (GetTime() - out.tx->GetTxTime() > nStakeMinAge)
+        if (GetTime() - out.tx->GetTxTime() > cStakeMinAge)
             return true;
     }
 
@@ -3598,11 +3602,20 @@ int CMerkleTx::GetDepthInMainChain(const CBlockIndex*& pindexRet, bool enableIX)
     return nResult;
 }
 
+int CMerkleTx::GetHeightInMainChain(const CBlockIndex* &pindexRet) const
+{
+    return GetDepthInMainChainINTERNAL(pindexRet) + chainActive.Height() - 1;
+}
+
 int CMerkleTx::GetBlocksToMaturity() const
 {
     if (!(IsCoinBase() || IsCoinStake()))
         return 0;
-    return max(0, (Params().COINBASE_MATURITY() + 1) - GetDepthInMainChain());
+    //return max(0, (Params().COINBASE_MATURITY() + 1) - GetDepthInMainChain());
+    if(GetHeightInMainChain() >= Params().PROTOCOL_SWITCH())
+        return max(0, (Params().NEW_COINBASE_MATURITY() + 1) - GetDepthInMainChain());
+    else
+        return max(0, (Params().COINBASE_MATURITY() + 1) - GetDepthInMainChain());
 }
 
 

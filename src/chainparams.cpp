@@ -104,7 +104,8 @@ public:
         nTargetSpacing = 1 * 90; 
         nLastPOWBlock = 2000;
         nMaturity = 50;
-        nProtocol_switch = 118820;
+        nNewMaturity = 100;
+        nProtocol_switch = 121760;
         nModifierUpdateBlock = 1;
 		
         const char* pszTimestamp = "Copico to launch one of it's innovative products on the blockchain";

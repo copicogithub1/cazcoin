@@ -70,6 +70,7 @@ unsigned int nCoinCacheSize = 5000;
 bool fAlerts = DEFAULT_ALERTS;
 
 unsigned int nStakeMinAge = 60;
+unsigned int nNewStakeMinAge = 60 * 60;
 int64_t nReserveBalance = 0;
 
 /** Fees smaller than this (in duffs) are considered zero fee (for relaying and mining)
@@ -924,6 +925,8 @@ bool GetCoinAge(const CTransaction& tx, const unsigned int nTxTime, uint64_t& nC
 {
     uint256 bnCentSecond = 0; // coin age in the unit of cent-seconds
     nCoinAge = 0;
+    int cHeight = chainActive.Height();
+    unsigned int cStakeMinAge = StakeMinAge(cHeight);
 
     CBlockIndex* pindex = NULL;
     BOOST_FOREACH (const CTxIn& txin, tx.vin) {
@@ -946,7 +949,7 @@ bool GetCoinAge(const CTransaction& tx, const unsigned int nTxTime, uint64_t& nC
         // Read block header
         CBlockHeader prevblock = pindex->GetBlockHeader();
 
-        if (prevblock.nTime + nStakeMinAge > nTxTime)
+        if (prevblock.nTime + cStakeMinAge > nTxTime)
             continue; // only count coins meeting min age requirement
 
         if (nTxTime < prevblock.nTime) {
@@ -1006,7 +1009,7 @@ bool CheckTransaction(const CTransaction& tx, CValidationState& state)
     }
 
     if (tx.IsCoinBase()) {
-        if (/*tx.vin[0].scriptSig.size() < 2 || */ tx.vin[0].scriptSig.size() > 150)
+        if (/*tx.vin[0].scriptSig.size() < 2 || */tx.vin[0].scriptSig.size() > 150)
             return state.DoS(100, error("CheckTransaction() : coinbase script size=%d", tx.vin[0].scriptSig.size()),
                 REJECT_INVALID, "bad-cb-length");
     } else {
@@ -1106,8 +1109,10 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
     // is it already in the memory pool?
     uint256 hash = tx.GetHash();
-    if (pool.exists(hash))
+    if (pool.exists(hash)) {
+        LogPrintf("%s tx already in mempool\n", __func__);
         return false;
+    }
 
     // ----------- swiftTX transaction scanning -----------
 
@@ -1617,18 +1622,26 @@ int64_t GetBlockValue(int nHeight)
 
 
     if (nHeight == 0) {
-        nSubsidy = 30000000 * COIN;
-    } else if (nHeight > 0 && nHeight < 100) {
-        nSubsidy = 0 * COIN;
-    } else if (nHeight >= 100 && nHeight < 345600) {
-        nSubsidy = 40 * COIN;
-    } else if (nHeight >= 345600 && nHeight < 1036800) {
-        nSubsidy = 20 * COIN;
-    } else if (nHeight >= 1036800 && nHeight < 1728000) {
-        nSubsidy = 10 * COIN;
-    } else if (nHeight >= 1728000) {
-        nSubsidy = 5 * COIN;
-    }
+		nSubsidy = 30000000 * COIN;
+	} else if (nHeight > 0 && nHeight < 100) {
+		nSubsidy = 0 * COIN;
+	} else if (nHeight >= 100 && nHeight < Params().PROTOCOL_SWITCH()) {
+		nSubsidy = 40 * COIN;
+	} else if (nHeight >= Params().PROTOCOL_SWITCH() && nHeight < 132000) {
+		nSubsidy = 50 * COIN;
+	} else if (nHeight >= 132000 && nHeight < 172800) {
+		nSubsidy = 30 * COIN;
+	} else if (nHeight >= 172800 && nHeight < 259200) {
+		nSubsidy = 25 * COIN;
+	} else if (nHeight >= 259200 && nHeight < 345600) {
+		nSubsidy = 20 * COIN;
+	} else if (nHeight >= 345600 && nHeight < 1036800) {
+		nSubsidy = 15 * COIN;
+	} else if (nHeight >= 1036800 && nHeight < 1728000) {
+		nSubsidy = 10 * COIN;
+	} else if (nHeight >= 1728000) {
+		nSubsidy = 5 * COIN;
+	}
     return nSubsidy;
 }
 
@@ -1841,7 +1854,10 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
 
             // If prev is coinbase, check that it's matured
             if (coins->IsCoinBase() || coins->IsCoinStake()) {
-                if (nSpendHeight - coins->nHeight < Params().COINBASE_MATURITY())
+            	int cDepth = Params().COINBASE_MATURITY();
+            	if (nSpendHeight >= Params().PROTOCOL_SWITCH())
+            	    cDepth = Params().NEW_COINBASE_MATURITY();
+            	if (nSpendHeight - coins->nHeight < cDepth)
                     return state.Invalid(
                         error("CheckInputs() : tried to spend coinbase at depth %d, coinstake=%d", nSpendHeight - coins->nHeight, coins->IsCoinStake()),
                         REJECT_INVALID, "bad-txns-premature-spend-of-coinbase");
@@ -1964,7 +1980,7 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
         }
 
         // restore inputs
-        if (i > 0) { // not coinbases
+        if (!tx.IsCoinBase()) { // not coinbases
             const CTxUndo& txundo = blockUndo.vtxundo[i - 1];
             if (txundo.vprevout.size() != tx.vin.size())
                 return error("DisconnectBlock() : transaction and undo data inconsistent - txundo.vprevout.siz=%d tx.vin.siz=%d", txundo.vprevout.size(), tx.vin.size());
@@ -4516,6 +4532,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         CAddress addrFrom;
         uint64_t nNonce = 1;
         vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
+        LogPrintf("This is our protocol %d and this is version number %i; This is the block height %d\n", Params().PROTOCOL_SWITCH(), pfrom->nVersion, chainActive.Tip()->nHeight);
         if (pfrom->nVersion < ActiveProtocol()) {
             // disconnect from peers older than this proto version
             LogPrintf("peer=%d using obsolete version %i; disconnecting\n", pfrom->id, pfrom->nVersion);
@@ -5304,8 +5321,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
 int ActiveProtocol()
 {
-    if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) && chainActive.Tip()->nHeight > Params().PROTOCOL_SWITCH()) {
-        if (chainActive.Tip()->nHeight >= Params().ModifierUpgradeBlock())
+    if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) || chainActive.Tip()->nHeight > Params().PROTOCOL_SWITCH()) {
+        //if (chainActive.Tip()->nHeight >= Params().ModifierUpgradeBlock())
             return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
     }
 
@@ -5648,6 +5665,14 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
     return true;
 }
 
+unsigned int StakeMinAge(int nHeight)
+{
+	if (nHeight >= Params().PROTOCOL_SWITCH()) {
+	    return nNewStakeMinAge;
+	} else {
+            return nStakeMinAge;
+	}
+}
 
 bool CBlockUndo::WriteToDisk(CDiskBlockPos& pos, const uint256& hashBlock)
 {
