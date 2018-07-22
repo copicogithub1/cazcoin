@@ -1627,15 +1627,15 @@ int64_t GetBlockValue(int nHeight)
 		nSubsidy = 0 * COIN;
 	} else if (nHeight >= 100 && nHeight < Params().PROTOCOL_SWITCH()) {
 		nSubsidy = 40 * COIN;
-	} else if (nHeight >= Params().PROTOCOL_SWITCH() && nHeight < 132000) {
+	} else if (nHeight >= Params().PROTOCOL_SWITCH() && nHeight < 150200) {
 		nSubsidy = 50 * COIN;
-	} else if (nHeight >= 132000 && nHeight < 172800) {
+	} else if (nHeight >= 150200 && nHeight < 236600) {
 		nSubsidy = 30 * COIN;
-	} else if (nHeight >= 172800 && nHeight < 259200) {
+	} else if (nHeight >= 236600 && nHeight < 323000) {
 		nSubsidy = 25 * COIN;
-	} else if (nHeight >= 259200 && nHeight < 345600) {
+	} else if (nHeight >= 323000 && nHeight < 409400) {
 		nSubsidy = 20 * COIN;
-	} else if (nHeight >= 345600 && nHeight < 1036800) {
+	} else if (nHeight >= 409400 && nHeight < 1036800) {
 		nSubsidy = 15 * COIN;
 	} else if (nHeight >= 1036800 && nHeight < 1728000) {
 		nSubsidy = 10 * COIN;
@@ -4532,7 +4532,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         CAddress addrFrom;
         uint64_t nNonce = 1;
         vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
-        LogPrintf("This is our protocol %d and this is version number %i; This is the block height %d\n", Params().PROTOCOL_SWITCH(), pfrom->nVersion, chainActive.Tip()->nHeight);
         if (pfrom->nVersion < ActiveProtocol()) {
             // disconnect from peers older than this proto version
             LogPrintf("peer=%d using obsolete version %i; disconnecting\n", pfrom->id, pfrom->nVersion);
@@ -5322,7 +5321,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 int ActiveProtocol()
 {
     if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) || chainActive.Tip()->nHeight > Params().PROTOCOL_SWITCH()) {
-        //if (chainActive.Tip()->nHeight >= Params().ModifierUpgradeBlock())
             return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
     }
 
