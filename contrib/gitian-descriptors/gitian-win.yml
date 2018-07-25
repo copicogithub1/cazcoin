@@ -1,5 +1,5 @@
 ---
-name: "cazcoin-win-1.0"
+name: "cazcoin-win-1.2.1"
 enable_cache: true
 suites:
 - "trusty"

@@ -1873,7 +1873,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
         if (!tx.IsCoinStake()) {
             if (nValueIn < tx.GetValueOut())
                 return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
-                                          tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
+                    tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
                     REJECT_INVALID, "bad-txns-in-belowout");
 
             // Tally transaction fees
@@ -5320,7 +5320,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 
 int ActiveProtocol()
 {
-    if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) || chainActive.Tip()->nHeight > Params().PROTOCOL_SWITCH()) {
+    if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) || chainActive.Tip()->nHeight > 118820) {
             return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
     }
 
