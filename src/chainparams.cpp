@@ -55,11 +55,13 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 	(50000, uint256("0x18979aa918bf457765ecc9d4bbf761a0bfa656f6cb12dd0007e5ceebac811edd"))
 	(80000, uint256("0x1bdefb98540a6a66da1ae7217e47d45d6de8a36a53869ddc9de869cb50321c26"))
 	(110000, uint256("0x64532ec3abe8553d7e33b99c2a4db39c95bd674d2cf69d42d7642ab417d1308c"))
-	(118800, uint256("0x43425e5ea2b977e11ddb9eb27b7ec2d923b5c616c7144b8d259f2cc3ee29732e"));
+	(118800, uint256("0x43425e5ea2b977e11ddb9eb27b7ec2d923b5c616c7144b8d259f2cc3ee29732e"))
+    (118811, uint256("0x3d63ebdb5463323fe2b3dc137fdcd8af92a671a3d7d770a2a5ec96c8608cd0f1"))
+	(118900, uint256("0xedd57aa988c4a82bfaadf86b898e248b03e39222411bcad37616863458900a1e"));
     
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-	1531176411, // * UNIX timestamp of last checkpoint block
+	1532896389, // * UNIX timestamp of last checkpoint block
     0,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
@@ -105,7 +107,7 @@ public:
         nLastPOWBlock = 2000;
         nMaturity = 50;
         nNewMaturity = 100;
-        nProtocol_switch = 121760;
+        nProtocol_switch = 122760;
         nModifierUpdateBlock = 1;
 		
         const char* pszTimestamp = "Copico to launch one of it's innovative products on the blockchain";
