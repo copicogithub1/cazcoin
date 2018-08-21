@@ -1629,11 +1629,11 @@ int64_t GetBlockValue(int nHeight)
 		nSubsidy = 40 * COIN;
 	} else if (nHeight >= Params().PROTOCOL_SWITCH() && nHeight < 150200) {
 		nSubsidy = 50 * COIN;
-	} else if (nHeight >= 150200 && nHeight < 153000) {
+	} else if (nHeight >= 150200 && nHeight < 166600) {
 		nSubsidy = 30 * COIN;
-	} else if (nHeight >= 153000 && nHeight < 183240) {
+	} else if (nHeight >= 166600 && nHeight < 196840) {
 		nSubsidy = 60 * COIN;
-	} else if (nHeight >= 183240 && nHeight < 345600) {
+	} else if (nHeight >= 196840 && nHeight < 345600) {
 		nSubsidy = 40 * COIN;
 	} else if (nHeight >= 345600 && nHeight < 1036800) {
 		nSubsidy = 20 * COIN;
