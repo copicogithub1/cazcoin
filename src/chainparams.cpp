@@ -65,6 +65,12 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 	(148000, uint256("0x0554246acc483e91f1b972b2794ebaa1095742703572a39bd882806d66195d8d"))
 	(150200, uint256("0x2fa5c42fbabd0f2f0dea9c39fa28bc6697a211693d7d68ed3e9dfdb22334bb13"))
 	(151000, uint256("0x61fca0e3ad87fa57143955397f6db14a6f32b5d10a788bb8245b176f1830c396"));
+    (171000, uint256("0xcfb3ed576a338115f0e43317c149e3c49188ddd1acf6d2dd8264c9038e5ad158"));
+    (193000, uint256("0xf663ae6b88d01cd9eebb69e3b4e30768767f03a78aca270ddcbe4ebcfe36e734"));
+    (213000, uint256("0xddc3839d74dbae90cd06b608be13dde85b049f6213d5a15932d3f1cc7bdd2e9c"));
+    (223000, uint256("0xe6d2623de291d0080d880984e21bb7ec488cad4f9ab2e3c3e56635d9ab6b0b08"));
+    (241705, uint256("0x84ceb94ef06574b1dd35c6999d9d8d7313f3b7b5f8b0046b0003caa50ba55915"));
+    
     
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
@@ -168,7 +174,7 @@ public:
         fHeadersFirstSyncingActive = false;
 		
         nPoolMaxTransactions = 3;
-        strSporkKey = "04338280798413878bbb0499614330f3d8b209e369adff6f48ea51c212cbf426517eebd214af1bf47677d4a2dc74cf4362c9a45e0d86ee66e429a65dcca7d78a97";
+        strSporkKey = "0425ddf25e96014ef102d69ed7f7d354becfdee616e6f5efda8518277aa7e45d6f2087e4c51bcd04ec46712aeb3049850469f122846ace0c5e8185dabe024bf2fc";
         strObfuscationPoolDummyAddress = "CYiNW89nDmRdrFjhMA6SGLX3gjffrBLFdY";
         nStartMasternodePayments = 1523896200; //16 April 2018 16:30:00 GMT +00
     }

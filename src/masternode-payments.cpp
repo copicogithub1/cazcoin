@@ -174,7 +174,7 @@ void DumpMasternodePayments()
     LogPrintf("Budget dump finished  %dms\n", GetTimeMillis() - nStart);
 }
 
-bool IsBlockValueValid(const CBlock& block, int64_t nExpectedValue)
+bool IsBlockValueValid(const CBlock& block, CAmount nExpectedValue, CAmount nMinted)
 {
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (pindexPrev == NULL) return true;
@@ -191,26 +191,32 @@ bool IsBlockValueValid(const CBlock& block, int64_t nExpectedValue)
     if (nHeight == 0) {
         LogPrintf("IsBlockValueValid() : WARNING: Couldn't find previous block");
     }
-
+	
     if (!masternodeSync.IsSynced()) { //there is no budget data to use to check anything
         //super blocks will always be on these blocks, max 100 per budgeting
         if (nHeight % GetBudgetPaymentCycleBlocks() < 100) {
             return true;
         } else {
-            if (block.vtx[0].GetValueOut() > nExpectedValue) return false;
+            if (nMinted > nExpectedValue) {
+				return false;
+			}
         }
     } else { // we're synced and have data so check the budget schedule
 
         //are these blocks even enabled
         if (!IsSporkActive(SPORK_13_ENABLE_SUPERBLOCKS)) {
-            return block.vtx[0].GetValueOut() <= nExpectedValue;
+			// If we're a superblock, set max mint (ignore genesis block
+			return nMinted <= nExpectedValue;
         }
 
         if (budget.IsBudgetPaymentBlock(nHeight)) {
             //the value of the block is evaluated in CheckBlock
-            return true;
+            // only payout budgets that are less than 11% of money supply
+			return true;
         } else {
-            if (block.vtx[0].GetValueOut() > nExpectedValue) return false;
+            if (nMinted > nExpectedValue) {
+				return false;
+			}
         }
     }
 
